@@ -9,19 +9,23 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('tarjetas', function (Blueprint $table) {
+        Schema::create('cards', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('uid')->unique(); // UID que viene desde Arduino
+            $table->string('holder_name')->nullable();
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('tarjetas');
+        Schema::dropIfExists('cards');
     }
 };

@@ -9,19 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('permisos_tarjes', function (Blueprint $table) {
+        Schema::create('floors', function (Blueprint $table) {
             $table->id();
+            $table->integer('floor_number')->unique(); // Número de piso: 1, 2, 3, etc.
+            $table->string('description')->nullable(); // "Administración", "Depósito", etc.
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('permisos_tarjes');
+        Schema::dropIfExists('floors');
     }
 };
