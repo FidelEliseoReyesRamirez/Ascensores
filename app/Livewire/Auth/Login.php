@@ -26,25 +26,32 @@ class Login extends Component
     /**
      * Handle an incoming authentication request.
      */
-    public function login(): void
-    {
-        $this->validate();
+   public function login(): void
+{
+    $this->validate();
 
-        $this->ensureIsNotRateLimited();
+    $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
-            RateLimiter::hit($this->throttleKey());
+    // Buscar usuario que coincida con email y que NO esté bloqueado ni eliminado
+    $user = \App\Models\User::where('email', $this->email)
+        ->where('bloqueado', false)
+        ->where('eliminado', false)
+        ->first();
 
-            throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
-            ]);
-        }
+    if (! $user || ! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        RateLimiter::hit($this->throttleKey());
 
-        RateLimiter::clear($this->throttleKey());
-        Session::regenerate();
-
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        throw ValidationException::withMessages([
+            'email' => __('auth.failed'),
+        ]);
     }
+
+    RateLimiter::clear($this->throttleKey());
+    Session::regenerate();
+
+    $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+}
+
 
     /**
      * Ensure the authentication request is not rate limited.

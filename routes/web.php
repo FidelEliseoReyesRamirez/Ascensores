@@ -32,3 +32,24 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/api/comando', [ComandoController::class, 'getComando'])->name('comando.api');
 
 require __DIR__.'/auth.php';
+
+use App\Http\Controllers\UsuarioController;
+
+Route::prefix('usuarios')->name('usuarios.')->group(function () {
+    Route::get('/', [UsuarioController::class, 'index'])->name('index');
+    Route::get('/create', [UsuarioController::class, 'create'])->name('create'); // Crear usuario
+    Route::post('/', [UsuarioController::class, 'store'])->name('store');         // Guardar usuario
+    Route::get('/{usuario}/edit', [UsuarioController::class, 'edit'])->name('edit');  // Editar usuario
+    Route::put('/{usuario}', [UsuarioController::class, 'update'])->name('update');  // Actualizar usuario
+    Route::get('/eliminados', [UsuarioController::class, 'deleted'])->name('deleted');
+    Route::patch('/{usuario}/bloqueo', [UsuarioController::class, 'toggleBloqueo'])->name('toggleBloqueo');
+    Route::delete('/{usuario}', [UsuarioController::class, 'destroy'])->name('destroy');
+});
+
+
+use App\Http\Controllers\AscensorController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('ascensores', [AscensorController::class, 'index'])->name('ascensores.index');
+    Route::post('ascensores/update-access', [AscensorController::class, 'updateAccess'])->name('ascensores.updateAccess');
+});
