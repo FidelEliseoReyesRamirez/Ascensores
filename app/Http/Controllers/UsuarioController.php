@@ -5,9 +5,70 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UsuarioController extends Controller
 {
+    public function restore($id)
+{
+    $usuario = User::findOrFail($id);
+
+    if ($usuario->eliminado) {
+        $usuario->eliminado = false;
+        $usuario->save();
+
+        return redirect()->back()->with('status', 'Usuario restaurado correctamente.');
+    }
+
+    return redirect()->back()->with('error', 'El usuario no está eliminado.');
+}
+
+    public function edit(User $usuario)
+    {
+        return view('usuarios.edit', compact('usuario'));
+    }
+
+    public function update(Request $request, User $usuario)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required','email','max:255', Rule::unique('users')->ignore($usuario->id)],
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        $usuario->name = $validated['name'];
+        $usuario->email = $validated['email'];
+
+        if (!empty($validated['password'])) {
+            $usuario->password = Hash::make($validated['password']);
+        }
+
+        $usuario->save();
+
+        return redirect()->route('usuarios.index')->with('status', 'Usuario actualizado correctamente.');
+    }
+     public function create()
+    {
+        return view('usuarios.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required','email','max:255', Rule::unique('users')],
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return redirect()->route('usuarios.index')->with('status', 'Usuario creado correctamente.');
+    }
     public function index(Request $request)
     {
         $query = User::query();

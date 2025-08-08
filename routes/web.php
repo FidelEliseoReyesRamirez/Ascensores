@@ -31,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
 // Ruta pública API para que el Arduino consulte el comando actual
 Route::get('/api/comando', [ComandoController::class, 'getComando'])->name('comando.api');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 use App\Http\Controllers\UsuarioController;
 
@@ -44,6 +44,7 @@ Route::prefix('usuarios')->name('usuarios.')->group(function () {
     Route::get('/eliminados', [UsuarioController::class, 'deleted'])->name('deleted');
     Route::patch('/{usuario}/bloqueo', [UsuarioController::class, 'toggleBloqueo'])->name('toggleBloqueo');
     Route::delete('/{usuario}', [UsuarioController::class, 'destroy'])->name('destroy');
+    Route::patch('/{usuario}/restore', [UsuarioController::class, 'restore'])->name('restore');
 });
 
 
