@@ -12,7 +12,7 @@
 
         <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
             <span class="font-bold text-lg text-gray-800 dark:text-gray-200">
-               Acceso de Ascensores
+                Acceso de Ascensores
             </span>
         </a>
 
@@ -62,7 +62,7 @@
 
                 <flux:menu.radio.group>
                     <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>
-                        {{ __('Settings') }}
+                        Configuración
                     </flux:menu.item>
                 </flux:menu.radio.group>
 
@@ -71,9 +71,10 @@
                 <form method="POST" action="{{ route('logout') }}" class="w-full">
                     @csrf
                     <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                        {{ __('Log Out') }}
+                        Cerrar sesión
                     </flux:menu.item>
                 </form>
+
             </flux:menu>
         </flux:dropdown>
     </flux:sidebar>
@@ -108,8 +109,9 @@
 
                 <flux:menu.radio.group>
                     <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>
-                        {{ __('Settings') }}
+                        Configuración
                     </flux:menu.item>
+
                 </flux:menu.radio.group>
 
                 <flux:menu.separator />
@@ -117,8 +119,9 @@
                 <form method="POST" action="{{ route('logout') }}" class="w-full">
                     @csrf
                     <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                        {{ __('Log Out') }}
+                        Cerrar sesión
                     </flux:menu.item>
+
                 </form>
             </flux:menu>
         </flux:dropdown>
